@@ -1,0 +1,43 @@
+{
+  "name": "mstorage",
+  "version": "1.0.0",
+  "description": "special data storages",
+  "main": "src-build/index.js",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "babel src --retain-lines --out-dir src-build",
+    "eslint": "eslint $(find . -not -path '*/*-build/*' -and -not -path '*/node_modules/*' -type f -name '*.es')",
+    "mocha": "mocha test",
+    "test": "npm run eslint && npm run mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nskazki/mstorage.git"
+  },
+  "keywords": [
+    "memory",
+    "starage",
+    "vault",
+    "queue",
+    "kv",
+    "hash"
+  ],
+  "author": "nskazki@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "babel-eslint": "^4.1.6",
+    "eslint": "1.10.1",
+    "eslint-plugin-mocha": "^1.1.0",
+    "mocha": "^2.3.4"
+  },
+  "bugs": {
+    "url": "https://github.com/nskazki/mstorage/issues"
+  },
+  "homepage": "https://github.com/nskazki/mstorage#readme",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "simple-debugger": "^1.0.3",
+    "xxhashjs": "^0.1.1"
+  }
+}
