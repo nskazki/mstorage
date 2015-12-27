@@ -128,6 +128,27 @@ describe('KV', () => {
     }
   })
 
+  it('getByValue - resolved', () => {
+    let kv = new KV()
+    let values = [ { 1: 1 }, { 2: 2 } ]
+
+    let done = values.every((value, key) => {
+      kv.set(key, value)
+      return kv.getByValue(value) === key
+    })
+    assert(done, 'all values must be exist')
+  })
+
+  it('getByValue - rejected', done => {
+    let kv = new KV()
+    try {
+      kv.getByValue({ 3: 3 })
+      done(new Error('should not have this key'))
+    } catch (_err) {
+      done()
+    }
+  })
+
   it('add (set)', () => {
     let kv = new KV()
     let key = { a: 'a' }
