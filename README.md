@@ -126,21 +126,21 @@ assert.deepEqual(kv.values(), [ 1 ])
 ```js
 let kv = new KV()
 kv.set('a', 1)
-assert(hv.has('a'))
+assert(kv.has('a'))
 ```
 
 #### `hasByValue` alias for `exists`
 ```js
 let kv = new KV()
 kv.set('a', 1)
-assert(hv.hasByValue(1))
+assert(kv.hasByValue(1))
 ```
 
 #### `get`
 ```js
 let kv = new KV()
 kv.set('a', 1)
-assert.equal(hv.get('a'), 1)
+assert.equal(kv.get('a'), 1)
 ```
 
 #### `getByValue` alias for `id`
@@ -154,7 +154,7 @@ assert.equal(kv.getByValue(1), 'a')
 ```js
 let kv = new KV()
 kv.set('a', 1)
-assert.equal(hv.get('a'), 1)
+assert.equal(kv.get('a'), 1)
 ```
 
 #### `del`
@@ -300,7 +300,7 @@ let q = new Queue()
 let id1 = q.add(1)
 let id2 = q.add(2)
 q.toHead(id2)
-assert.equal(q.next(), 1)
+assert.equal(q.next(), 2)
 ```
 
 #### `size`
