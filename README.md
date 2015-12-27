@@ -47,8 +47,9 @@ assert(hv.exists({ 1: 10000000 }))
 * `keys`
 * `values`
 * `has`
-* `hasByValue`
+* `hasByValue` alias for `exists`
 * `get`
+* `getByValue` alias fot `id`
 * `set` alias for `add`
 * `del`
 * `delByValue`
@@ -128,7 +129,7 @@ kv.set('a', 1)
 assert(hv.has('a'))
 ```
 
-#### `hasByValue`
+#### `hasByValue` alias for `exists`
 ```js
 let kv = new KV()
 kv.set('a', 1)
@@ -140,6 +141,13 @@ assert(hv.hasByValue(1))
 let kv = new KV()
 kv.set('a', 1)
 assert.equal(hv.get('a'), 1)
+```
+
+#### `getByValue` alias for `id`
+```js
+let kv = new KV()
+kv.set('a', 1)
+assert.equal(kv.getByValue(1), 'a')
 ```
 
 #### `set` alias for `add`
