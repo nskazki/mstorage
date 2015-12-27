@@ -44,6 +44,10 @@ export default class KV {
     return this._valueIndex(value) !== -1
   }
 
+  exists(value) {
+    return this.hasByValue(value)
+  }
+
   _keyIndex(k) {
     return this.keys().indexOf(k)
   }
@@ -74,6 +78,10 @@ export default class KV {
 
     let index = this._valueIndex(v)
     return this._getKey(index)
+  }
+
+  id(v) {
+    return this.getByValue(v)
   }
 
   add(k, v) {
