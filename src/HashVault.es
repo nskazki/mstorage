@@ -48,6 +48,10 @@ export default class HashVault {
     }
   }
 
+  toJSON() {
+    return this.dump()
+  }
+
   id(searchEl) {
     let searchIndex = this._indexOf(searchEl)
     if (searchIndex === -1)

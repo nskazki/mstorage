@@ -35,6 +35,10 @@ export default class KV {
     }
   }
 
+  toJSON() {
+    return this.dump()
+  }
+
   keys() {
     return this._keys
   }

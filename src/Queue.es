@@ -36,6 +36,10 @@ export default class Queue {
     }
   }
 
+  toJSON() {
+    return this.dump()
+  }
+
   forEach(func, context) {
     return this.each(func, context)
   }
