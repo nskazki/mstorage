@@ -1,19 +1,7 @@
 'use strict'
 
-import { isObject, isUndefined } from 'lodash'
-import { deepEqual, equal, ok } from 'assert'
 import { Queue } from '../src'
-
-let assert = (actual, expected, message) => {
-  if (isUndefined(message)) {
-    message = expected
-    return ok(actual, message)
-  }
-
-  return isObject(actual) && isObject(expected)
-    ? deepEqual(actual, expected, message)
-    : equal(actual, expected, message)
-}
+import assert from './prettyAssert'
 
 describe('Queue', () => {
   it('drop', () => {
@@ -62,6 +50,21 @@ describe('Queue', () => {
     assert(q1, q2, 'vaults must be equal')
   })
 
+  it('dump -> restore', () => {
+    let q1 = new Queue()
+    let values = [ { 1: 1 }, 2 ]
+    values.forEach(val => q1.add(val))
+    let id = q1.add({ 3: 3 })
+    q1.toHead(id)
+    q1.delByValue(2)
+
+    let dump = JSON.stringify(q1.dump())
+    let q2 = new Queue()
+    q2.restore(JSON.parse(dump))
+
+    assert(q1.dump(), q2.dump(), 'vaults must be equal')
+  })
+
   it('each (forEach)', () => {
     let q = new Queue()
     let values = [ { 1: 1 }, { 2: 2 } ]
@@ -80,8 +83,8 @@ describe('Queue', () => {
     let id = q.add(val)
 
     assert(q.size(), 1, 'size must be 1')
-    assert(q.all().length, 'values array length must be 1')
-    assert(q.shuffle().length, 'shuffled values array length must be 1')
+    assert(q.all().length, 1, 'values array length must be 1')
+    assert(q.shuffle().length, 1, 'shuffled values array length must be 1')
     assert(q.has(id), 'id must be exist')
     assert(q.hasByValue(val), 'value must be exist')
     assert(q.get(id), val, 'values must be equal')

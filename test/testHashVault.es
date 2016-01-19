@@ -1,19 +1,7 @@
 'use strict'
 
-import { isObject, isUndefined } from 'lodash'
-import { deepEqual, equal, ok } from 'assert'
 import { HashVault } from '../src'
-
-let assert = (actual, expected, message) => {
-  if (isUndefined(message)) {
-    message = expected
-    return ok(actual, message)
-  }
-
-  return isObject(actual) && isObject(expected)
-    ? deepEqual(actual, expected, message)
-    : equal(actual, expected, message)
-}
+import assert from './prettyAssert'
 
 describe('HashVault', () => {
   it('init', () => {
@@ -43,6 +31,21 @@ describe('HashVault', () => {
     let dump = hv1.dump()
     let hv2 = new HashVault()
     hv2.copy(dump)
+
+    assert(hv1, hv2, 'vaults must be equal')
+  })
+
+  it('dump -> restore', () => {
+    let hv1 = new HashVault()
+    let values = [ { 1: 1 }, { 2: 2 } ]
+
+    hv1.init(values)
+    hv1.add({ 3: 3 })
+    hv1.delByValue({ 2: 2 })
+
+    let dump = JSON.stringify(hv1.dump())
+    let hv2 = new HashVault()
+    hv2.restore(JSON.parse(dump))
 
     assert(hv1, hv2, 'vaults must be equal')
   })

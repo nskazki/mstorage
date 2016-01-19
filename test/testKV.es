@@ -1,19 +1,7 @@
 'use strict'
 
-import { isObject, isUndefined } from 'lodash'
-import { deepEqual, equal, ok } from 'assert'
 import { KV } from '../src'
-
-let assert = (actual, expected, message) => {
-  if (isUndefined(message)) {
-    message = expected
-    return ok(actual, message)
-  }
-
-  return isObject(actual) && isObject(expected)
-    ? deepEqual(actual, expected, message)
-    : equal(actual, expected, message)
-}
+import assert from './prettyAssert'
 
 describe('KV', () => {
   it('drop', () => {
@@ -59,6 +47,21 @@ describe('KV', () => {
     let dump = kv1.dump()
     let kv2 = new KV()
     kv2.copy(dump)
+
+    assert(kv1, kv2, 'vaults must be equal')
+  })
+
+  it('dump -> restore', () => {
+    let kv1 = new KV()
+    let keys = [ { a: 'a' }, { b: 'b' } ]
+    keys.forEach((key, value) => kv1.set(key, value))
+    kv1.set({ c: 'c' }, 2)
+    kv1.delByValue(0)
+    kv1.delByValue(2)
+
+    let dump = JSON.stringify(kv1.dump())
+    let kv2 = new KV()
+    kv2.restore(JSON.parse(dump))
 
     assert(kv1, kv2, 'vaults must be equal')
   })
