@@ -106,8 +106,12 @@ Key-Value storage
 ```js
 var kv1 = new KV()
 var kv2 = new KV()
+
 kv1.set('a', 1)
 kv2.copy(kv1)
+// WARNING! all null keys and values 
+// will be replaced to undefined
+
 assert.deepEqual(kv1.keys(), kv2.keys())
 ```
 
@@ -119,8 +123,10 @@ var kv2 = new KV()
 kv1.set('a', 1)
 var str = JSON.stringify(kv1.dump())
 // or just call JSON.stringify(kv1)
-
 kv2.copy(JSON.parse(str))
+// WARNING! all null keys and values 
+// will be replaced to undefined
+
 assert.deepEqual(kv1.keys(), kv2.keys())
 ```
 
@@ -213,6 +219,7 @@ var q2 = new Queue()
 
 q1.add(1)
 q2.copy(q1)
+// WARNING! all null values will be replaced to undefined
 
 assert.deepEqual(q1.all(), q2.all())
 ```
@@ -225,8 +232,9 @@ var q2 = new Queue()
 q1.add(1)
 var str = JSON.stringify(q1.dump())
 // or just call JSON.stringify(q1)
-
 q2.copy(JSON.parse(str))
+// WARNING! all null values will be replaced to undefined
+
 assert.deepEqual(q1.all(), q2.all())
 ```
 
@@ -381,8 +389,8 @@ hv1.add(2)
 
 var str = JSON.stringify(hv1.dump())
 // or just call JSON.stringify(hv1)
-
 hv2.copy(JSON.parse(str))
+
 assert.ok(hv2.exists(1))
 assert.ok(hv2.exists(2))
 ```
