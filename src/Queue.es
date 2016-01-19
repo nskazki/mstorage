@@ -1,8 +1,7 @@
 'use strict'
 
 import { debugMethods } from 'simple-debugger'
-import { shuffle, isNumber,
-  isUndefined, isArray } from 'lodash'
+import { shuffle, isNumber, isNull, isUndefined, isArray } from 'lodash'
 import { format } from 'util'
 
 export default class Queue {
@@ -24,8 +23,8 @@ export default class Queue {
       throw new Error(`Queue#copy problem: arg must be a Queue`
         + format(`\n\t arg: %j`, q))
 
-    this._storage = q._storage.concat()
-    this._queue   = q._queue.concat()
+    this._storage = q._storage.map(v => isNull(v) ? undefined : v)
+    this._queue   = q._queue.map(v => isNull(v) ? undefined : v)
     return this
   }
 
