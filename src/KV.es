@@ -23,6 +23,16 @@ export default class KV {
       throw new Error(`KV#copy problem: arg must be a KV`
         + format(`\n\t arg: %j`, kv))
 
+    this._values = kv._values.concat()
+    this._keys   = kv._keys.concat()
+    return this
+  }
+
+  restore(kv) {
+    if (!isArray(kv._keys) || !isArray(kv._values))
+      throw new Error(`KV#restore problem: arg must be a { _keys :: Array, _values :: Array }`
+        + format(`\n\t arg: %j`, kv))
+
     this._values = kv._values.map(v => isNull(v) ? undefined : v)
     this._keys   = kv._keys.map(v => isNull(v) ? undefined : v)
     return this

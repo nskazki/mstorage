@@ -23,6 +23,16 @@ export default class Queue {
       throw new Error(`Queue#copy problem: arg must be a Queue`
         + format(`\n\t arg: %j`, q))
 
+    this._storage = q._storage.concat()
+    this._queue   = q._queue.concat()
+    return this
+  }
+
+  restore(q) {
+    if (!isArray(q._queue) || !isArray(q._storage))
+      throw new Error(`Queue#restore problem: arg must be { _queue :: Array, _storage :: Array }`
+        + format(`\n\t arg: %j`, q))
+
     this._storage = q._storage.map(v => isNull(v) ? undefined : v)
     this._queue   = q._queue.map(v => isNull(v) ? undefined : v)
     return this

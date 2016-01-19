@@ -41,6 +41,14 @@ export default class HashVault {
     return this
   }
 
+  restore(hv) {
+    if (!isArray(hv._array) || !isNumber(hv._seed))
+      throw new Error(`HashVault#restore problem: arg must be a { _array :: Array, _seed :: Number }`
+        + format(`\n\t arg: %j`, hv))
+
+    return this.copy(hv)
+  }
+
   dump() {
     return {
       _array: this._array.concat(),
