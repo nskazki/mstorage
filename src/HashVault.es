@@ -41,6 +41,13 @@ export default class HashVault {
     return this
   }
 
+  dump() {
+    return {
+      _array: this._array.concat(),
+      _seed: this._seed
+    }
+  }
+
   id(searchEl) {
     let searchIndex = this._indexOf(searchEl)
     if (searchIndex === -1)

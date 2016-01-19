@@ -28,6 +28,13 @@ export default class KV {
     return this
   }
 
+  dump() {
+    return {
+      _values: this._values.concat(),
+      _keys: this._keys.concat()
+    }
+  }
+
   keys() {
     return this._keys
   }

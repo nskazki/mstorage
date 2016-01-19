@@ -51,6 +51,18 @@ describe('KV', () => {
     }
   })
 
+  it('dump -> copy', () => {
+    let kv1 = new KV()
+    let keys = [ { a: 'a' }, { b: 'b' } ]
+    keys.forEach((key, value) => kv1.set(key, value))
+
+    let dump = kv1.dump()
+    let kv2 = new KV()
+    kv2.copy(dump)
+
+    assert(kv1, kv2, 'vaults must be equal')
+  })
+
   it('keys', () => {
     let kv = new KV()
     let keys = [ { a: 'a' }, { b: 'b' } ]

@@ -29,6 +29,13 @@ export default class Queue {
     return this
   }
 
+  dump() {
+    return {
+      _storage: this._storage.concat(),
+      _queue: this._queue.concat()
+    }
+  }
+
   forEach(func, context) {
     return this.each(func, context)
   }

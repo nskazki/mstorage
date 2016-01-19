@@ -50,6 +50,18 @@ describe('Queue', () => {
     }
   })
 
+  it('dump -> copy', () => {
+    let q1 = new Queue()
+    let values = [ { 1: 1 }, { 2: 2 } ]
+    values.forEach(val => q1.add(val))
+
+    let dump = q1.dump()
+    let q2 = new Queue()
+    q2.copy(dump)
+
+    assert(q1, q2, 'vaults must be equal')
+  })
+
   it('each (forEach)', () => {
     let q = new Queue()
     let values = [ { 1: 1 }, { 2: 2 } ]

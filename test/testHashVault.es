@@ -35,6 +35,18 @@ describe('HashVault', () => {
     assert(hv1.size(), hv2.size(), 'sizes must be equal')
   })
 
+  it('dump -> copy', () => {
+    let hv1 = new HashVault()
+    let values = [ { 1: 1 }, { 2: 2 } ]
+    hv1.init(values)
+
+    let dump = hv1.dump()
+    let hv2 = new HashVault()
+    hv2.copy(dump)
+
+    assert(hv1, hv2, 'vaults must be equal')
+  })
+
   it('getByValue - resolved (id)', () => {
     let hv = new HashVault()
     let values = [ { 1: 1 }, { 2: 2 } ]
