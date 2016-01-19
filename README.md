@@ -44,6 +44,7 @@ assert(hv.exists({ 1: 10000000 }))
 
 * `drop`
 * `copy`
+* `dump`
 * `keys`
 * `values`
 * `has`
@@ -59,6 +60,7 @@ assert(hv.exists({ 1: 10000000 }))
 
 * `drop` 
 * `copy`
+* `dump`
 * `each` alias for `forEach` 
 * `add`
 * `del`
@@ -79,6 +81,7 @@ assert(hv.exists({ 1: 10000000 }))
 * `init`
 * `drop`
 * `copy`
+* `dump`
 * `getByValue` alias for `id`
 * `add`
 * `del`
@@ -105,6 +108,19 @@ var kv1 = new KV()
 var kv2 = new KV()
 kv1.set('a', 1)
 kv2.copy(kv1)
+assert.deepEqual(kv1.keys(), kv2.keys())
+```
+
+#### `dump`
+```js
+var kv1 = new KV()
+var kv2 = new KV()
+
+kv1.set('a', 1)
+var str = JSON.stringify(kv1.dump())
+// or just call JSON.stringify(kv1)
+
+kv2.copy(JSON.parse(str))
 assert.deepEqual(kv1.keys(), kv2.keys())
 ```
 
@@ -198,6 +214,19 @@ var q2 = new Queue()
 q1.add(1)
 q2.copy(q1)
 
+assert.deepEqual(q1.all(), q2.all())
+```
+
+#### `dump`
+```js
+var q1 = new Queue()
+var q2 = new Queue()
+
+q1.add(1)
+var str = JSON.stringify(q1.dump())
+// or just call JSON.stringify(q1)
+
+q2.copy(JSON.parse(str))
 assert.deepEqual(q1.all(), q2.all())
 ```
 
@@ -340,6 +369,22 @@ hv1.add(2)
 
 hv2.copy(hv1)
 assert.equal(hv1.size(), hv2.size())
+```
+
+#### `dump`
+```js
+var hv1 = new HashVault()
+var hv2 = new HashVault()
+
+hv1.add(1)
+hv1.add(2)
+
+var str = JSON.stringify(hv1.dump())
+// or just call JSON.stringify(hv1)
+
+hv2.copy(JSON.parse(str))
+assert.ok(hv2.exists(1))
+assert.ok(hv2.exists(2))
 ```
 
 #### `getByValue` alias for `id`
