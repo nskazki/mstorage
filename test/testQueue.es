@@ -1,7 +1,7 @@
 'use strict'
 
 import { Queue } from '../src'
-import assert from './prettyAssert'
+import assert from 'power-assert'
 
 describe('Queue', () => {
   it('drop', () => {
@@ -10,9 +10,9 @@ describe('Queue', () => {
     values.forEach(val => q.add(val))
     q.drop()
 
-    assert(q.size(), 0, 'size must be 0')
-    assert(q.all().length, 0, 'values array must be empty')
-    assert(q.shuffle().length, 0, 'shuffled values array must be empty')
+    assert.ok(q.size() === 0)
+    assert.ok(q.all().length === 0)
+    assert.ok(q.shuffle().length === 0)
   })
 
   it('copy - resolved', () => {
@@ -23,19 +23,14 @@ describe('Queue', () => {
     let q2 = new Queue()
     q1.copy(q2)
 
-    assert(q2.all(), q1.all(), 'values arrays must be equal')
-    assert(q2.size(), q1.size(), 'sizes must be equal')
+    assert.deepStrictEqual(q2.all(), q1.all())
+    assert.deepStrictEqual(q2.size(), q1.size())
   })
 
-  it('copy - rejected', done => {
+  it('copy - rejected', () => {
     let q = new Queue()
 
-    try {
-      q.copy({})
-      done(new Error('it is impossible to copy an object of another type'))
-    } catch (_err) {
-      done()
-    }
+    assert.throws(() => q.copy({}))
   })
 
   it('dump -> copy', () => {
@@ -47,7 +42,7 @@ describe('Queue', () => {
     let q2 = new Queue()
     q2.copy(dump)
 
-    assert(q1, q2, 'vaults must be equal')
+    assert.deepStrictEqual(q1, q2)
   })
 
   it('dump -> restore', () => {
@@ -62,7 +57,7 @@ describe('Queue', () => {
     let q2 = new Queue()
     q2.restore(JSON.parse(dump))
 
-    assert(q1.dump(), q2.dump(), 'vaults must be equal')
+    assert.deepStrictEqual(q1, q2)
   })
 
   it('each (forEach)', () => {
@@ -72,8 +67,8 @@ describe('Queue', () => {
 
     let context = { }
     q.each(function (val, id) {
-      assert(val, values[id], 'values must be equal')
-      assert(context, this, 'contexts must be equal')
+      assert.ok(val, values[id])
+      assert.ok(context, this)
     }, context)
   })
 
@@ -82,13 +77,13 @@ describe('Queue', () => {
     let val = { 1: 1 }
     let id = q.add(val)
 
-    assert(q.size(), 1, 'size must be 1')
-    assert(q.all().length, 1, 'values array length must be 1')
-    assert(q.shuffle().length, 1, 'shuffled values array length must be 1')
-    assert(q.has(id), 'id must be exist')
-    assert(q.hasByValue(val), 'value must be exist')
-    assert(q.get(id), val, 'values must be equal')
-    assert(q.getByValue(val), id, 'ids must be equal')
+    assert.ok(q.size() ===  1)
+    assert.ok(q.all().length === 1)
+    assert.ok(q.shuffle().length === 1)
+    assert.ok(q.has(id))
+    assert.ok(q.hasByValue(val))
+    assert.ok(q.get(id) === val)
+    assert.ok(q.getByValue(val) === id)
   })
 
   it('del - resolved', () => {
@@ -97,51 +92,46 @@ describe('Queue', () => {
     let id = q.add(val)
     q.del(id)
 
-    assert(q.size(), 0, 'size must be 0')
-    assert(q.all().length, 0, 'values array must be empty')
-    assert(q.shuffle().length, 0, 'shuffled values array must be empty')
+    assert.ok(q.size() === 0)
+    assert.ok(q.all().length === 0)
+    assert.ok(q.shuffle().length === 0)
   })
 
-  it('del - rejected', done => {
+  it('del - rejected', () => {
     let q = new Queue()
     let val = { 1: 1 }
     let existId = q.add(val)
     let otherId = existId - 1
-    try {
-      q.del(otherId)
-      done(new Error('id should not exist'))
-    } catch (_err) {
-      done()
-    }
+
+    assert.throws(() => q.del(otherId))
   })
 
   it('delByValue - resolved', () => {
     let q = new Queue()
     let val = { 1: 1 }
-    q.add(val)
+    let id = q.add(val)
     q.delByValue(val)
+
+    assert.ok(q.hasByValue(val) === false)
+    assert.ok(q.has(id) === false)
   })
 
-  it('delByValue - rejected', done => {
+  it('delByValue - rejected', () => {
     let q = new Queue()
     let existVal = { 1: 1 }
     let otherVal = { 3: 3 }
     q.add(existVal)
 
-    try {
-      q.delByValue(otherVal)
-      done(new Error('value should not exist'))
-    } catch (_err) {
-      done()
-    }
+    assert.throws(() => q.delByValue(otherVal))
   })
 
   it('has - resolved', () => {
     let q = new Queue()
     let values = [ { 1: 1 }, { 2: 2 } ]
     let ids = values.map(val => q.add(val))
-    let done = ids.every(id => q.has(id))
-    assert(done, 'ids must be exist')
+
+    assert.ok(ids.every(id => q.has(id)),
+      'ids must be exist')
   })
 
   it('has - rejected', () => {
@@ -149,6 +139,7 @@ describe('Queue', () => {
     let val = { 1: 1 }
     let existId = q.add(val)
     let otherId = existId - 1
+
     if (q.has(otherId)) throw new Error('id should not exist')
   })
 
@@ -157,8 +148,8 @@ describe('Queue', () => {
     let values = [ { 1: 1 }, { 2: 2 } ]
     values.forEach(val => q.add(val))
 
-    let done = values.every(val => q.hasByValue(val))
-    assert(done, 'all values must be exist')
+    assert.ok(values.every(val => q.hasByValue(val)),
+      'all values must be exist')
   })
 
   it('hasByValue - rejected (exists)', () => {
@@ -167,8 +158,8 @@ describe('Queue', () => {
     let otherValues = [ { 3: 3 }, { 3: 3 } ]
     existValues.forEach(val => q.add(val))
 
-    let done = !otherValues.some(val => q.hasByValue(val))
-    assert(done, 'none of the value should not exist')
+    assert.ok(!otherValues.some(val => q.hasByValue(val)),
+      'none of the value should not exist')
   })
 
   it('get - resolved', () => {
@@ -176,21 +167,16 @@ describe('Queue', () => {
     let val = { 1: 1 }
     let id = q.add(val)
 
-    assert(q.get(id), val, 'values must be equal')
+    assert.ok(q.get(id) === val)
   })
 
-  it('get - rejected', done => {
+  it('get - rejected', () => {
     let q = new Queue()
     let val = { 1: 1 }
     let existId = q.add(val)
     let otherId = existId - 1
 
-    try {
-      q.get(otherId)
-      done(new Error('id should not exist'))
-    } catch (_err) {
-      done()
-    }
+    assert.throws(() => q.get(otherId))
   })
 
   it('getByValue - resolved (id)', () => {
@@ -198,21 +184,16 @@ describe('Queue', () => {
     let values = [ { 1: 1 }, { 2: 2 } ]
     values.forEach(val => q.add(val))
 
-    let done = values.every((val, index) => q.id(val) === index)
-    assert(done, 'all values must have id')
+    assert.ok(values.every((val, index) => q.id(val) === index),
+      'all values must have id')
   })
 
-  it('getByValue - rejected (id)', done => {
+  it('getByValue - rejected (id)', () => {
     let q = new Queue()
     let val = { 1: 1 }
     q.add(val)
 
-    try {
-      q.id({ 3: 3 })
-      done(new Error('value should not exist'))
-    } catch (_err) {
-      done()
-    }
+    assert.throws(() => q.id({ 3: 3 }))
   })
 
   it('all', () => {
@@ -220,7 +201,7 @@ describe('Queue', () => {
     let values = [ { 1: 1 }, { 2: 2 } ]
     values.forEach(val => q.add(val))
 
-    assert(q.all(), values, 'values must be equal')
+    assert.deepStrictEqual(q.all(), values)
   })
 
   it('shuffle', () => {
@@ -228,13 +209,12 @@ describe('Queue', () => {
     let values = [ { 1: 1 }, { 2: 2 } ]
     values.forEach(val => q.add(val))
 
-    assert(
+    assert.deepStrictEqual(
       q.shuffle().map(v => JSON.stringify(v)).sort(),
-      values.map(v => JSON.stringify(v)).sort(),
-      'values must be equal')
+      values.map(v => JSON.stringify(v)).sort())
   })
 
-  it('next (shift)', done => {
+  it('next (shift)', () => {
     let q = new Queue()
     let val1 = { 1: 1 }
     let val2 = { 2: 2 }
@@ -243,21 +223,17 @@ describe('Queue', () => {
     let id2 = q.add(val2)
 
     let next1 = q.next()
-    assert(next1, val1, 'values must be equal')
-    assert(q.has(id1), false, 'id1 should not exist')
-    assert(q.hasByValue(val1), false, 'val1 should not exist')
+    assert.ok(next1 === val1)
+    assert.ok(q.has(id1) === false)
+    assert.ok(q.hasByValue(val1) === false)
 
     let next2 = q.next()
-    assert(next2, val2, 'values must be equal')
-    assert(q.has(id2), false, 'id2 should not exist')
-    assert(q.hasByValue(val2), false, 'val2 should not exist')
+    assert.ok(next2 === val2)
+    assert.ok(q.has(id2) === false)
+    assert.ok(q.hasByValue(val2) === false)
 
-    try {
-      q.next()
-      done(new Error('method call is not possible - the queue must be empty'))
-    } catch (_err) {
-      done()
-    }
+    assert.throws(() => q.next(),
+      'the queue must be empty')
   })
 
   it('toTail - resolved', () => {
@@ -269,25 +245,21 @@ describe('Queue', () => {
     q.add(val2)
 
     q.toTail(id1)
-    assert(q.get(id1), val1, 'values must be equal')
-    assert(q.getByValue(val1), id1, 'ids must be equal')
+    assert.ok(q.get(id1) === val1, 'values must be equal')
+    assert.ok(q.getByValue(val1) === id1, 'ids must be equal')
 
-    let next = q.next()
-    assert(next, val2, 'values must be equal')
+    assert.ok(q.next(), val2,
+      'values must be equal')
   })
 
-  it('toTail - rejected', done => {
+  it('toTail - rejected', () => {
     let q = new Queue()
     let val = { 1: 1 }
     let existId = q.add(val)
     let otherId = existId - 1
 
-    try {
-      q.toTail(otherId)
-      done(new Error('id does not exist'))
-    } catch (_err) {
-      done()
-    }
+    assert.throws(() => q.toTail(otherId),
+     'id does not exist')
   })
 
   it('toHead - resolved', () => {
@@ -299,24 +271,18 @@ describe('Queue', () => {
     let id2 = q.add(val2)
 
     q.toHead(id2)
-    assert(q.get(id2), val2, 'values must be equal')
-    assert(q.getByValue(val2), id2, 'ids must be equal')
-
-    let next = q.next()
-    assert(next, val2, 'values must be equal')
+    assert.ok(q.get(id2), val2)
+    assert.ok(q.getByValue(val2))
+    assert.ok(q.next(), val2)
   })
 
-  it('toHead - rejected', done => {
+  it('toHead - rejected', () => {
     let q = new Queue()
     let val = { 1: 1 }
     let existId = q.add(val)
     let otherId = existId - 1
 
-    try {
-      q.toHead(otherId)
-      done(new Error('id does not exist'))
-    } catch (_err) {
-      done()
-    }
+    assert.throws(() => q.toHead(otherId),
+      'id does not exist')
   })
 })
