@@ -43,9 +43,8 @@ assert(hv.exists({ 1: 10000000 }))
 #### KV
 
 * `drop`
-* `copy`
+* `copy` alias for `restore`
 * `dump`
-* `restore`
 * `keys`
 * `values`
 * `has`
@@ -104,7 +103,7 @@ Key-Value storage
  assert.equal(kv.size(), 0)
  ```
 
-#### `copy` - copy from other KV
+#### `copy` alias for `restore`
 ```js
 var kv1 = new KV()
 var kv2 = new KV()
@@ -124,8 +123,6 @@ kv1.set('a', 1)
 var str = JSON.stringify(kv1.dump())
 // or just call JSON.stringify(kv1)
 kv2.restore(JSON.parse(str))
-// WARNING! all null keys and values 
-// will be replaced to undefined
 
 assert.deepEqual(kv1.keys(), kv2.keys())
 ```
