@@ -33,8 +33,13 @@ export default class Queue {
       throw new Error(`Queue#restore problem: arg must be { _queue :: Array, _storage :: Array }`
         + format(`\n\t arg: %j`, q))
 
-    this._storage = q._storage.map(v => isNull(v) ? undefined : v)
-    this._queue   = q._queue.map(v => isNull(v) ? undefined : v)
+    this._storage = q._storage.concat()
+    this._queue   = q._queue.concat()
+
+    for (let index = 0; index !== this._storage.length; index++) {
+      if (isNull(this._storage[index])) delete this._storage[index]
+    }
+
     return this
   }
 
