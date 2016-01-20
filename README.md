@@ -6,6 +6,7 @@ npm i -S mstorage
 
 ```js
 import { KV } from 'mstorage'
+import assert from 'assert'
 
 var kv = new KV()
 var key = { a: 'a' }
@@ -16,8 +17,11 @@ console.log(kv.has(key))
 console.log(kv.hasByValue(val))
 console.log(kv.get(key))
 console.log(kv.getByValue(val))
+```
 
+```js
 import { Queue } from 'mstorage'
+import assert from 'assert'
 
 var q = new Queue()
 var id1 = q.add({ 1: 1 })
@@ -25,8 +29,11 @@ var id2 = q.add({ 2: 2 })
 q.toTail(id1)
 var next = q.next()
 assert.deepEqual(next, { 2: 2 })
+```
 
+```js
 import { HashVault } from 'mstorage'
+import assert from 'assert'
 
 var array = []
 for (var index = 0; index !== 1e6; index++) 
