@@ -50,7 +50,7 @@ assert(hv.exists({ 1: 10000000 }))
 #### KV
 
 * [`drop`](#drop---erase-storage-)
-* [`copy` alias for `restore`](#copy-alias-for-restore-)
+* [`copy`](#copy-)
 * [`dump` & `restore`](#dump--restore-)
 * [`keys`](#keys---return-list-of-keys-)
 * [`values`](#values---return-list-of-values-)
@@ -66,7 +66,7 @@ assert(hv.exists({ 1: 10000000 }))
 #### Queue
 
 * [`drop`](#drop-)
-* [`copy`](#copy-)
+* [`copy`](#copy--1)
 * [`dump` & `restore`](#dump--restore--1)
 * [`each` alias for `forEach`](#each-alias-for-foreach-)
 * [`add`](#add-)
@@ -87,7 +87,7 @@ assert(hv.exists({ 1: 10000000 }))
 
 * [`init`](#init-)
 * [`drop`](#drop--1)
-* [`copy` alias for `restore`](#copy-alias-for-restore--1)
+* [`copy` alias for `restore`](#copy-alias-for-restore-)
 * [`dump` & `restore`](#dump--restore--2)
 * [`getByValue` alias for `id`](#getbyvalue-alias-for-id--2)
 * [`add`](#add--1)
@@ -109,7 +109,7 @@ Key-Value storage
  assert.equal(kv.size(), 0)
  ```
 
-#### `copy` alias for `restore` [[🛨]](#kv)
+#### `copy` [[🛨]](#kv)
 ```js
 var kv1 = new KV()
 var kv2 = new KV()
@@ -129,6 +129,7 @@ kv1.set('a', 1)
 var str = JSON.stringify(kv1.dump())
 // or just call JSON.stringify(kv1)
 kv2.restore(JSON.parse(str))
+// WARNING! all null keys and values will be replaced to undefined
 
 assert.deepEqual(kv1.keys(), kv2.keys())
 ```

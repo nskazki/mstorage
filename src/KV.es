@@ -1,7 +1,7 @@
 'use strict'
 
 import { debugMethods } from 'simple-debugger'
-import { isArray } from 'lodash'
+import { isArray, isNull } from 'lodash'
 import { format } from 'util'
 
 export default class KV {
@@ -33,7 +33,9 @@ export default class KV {
       throw new Error(`KV#restore problem: arg must be a { _keys :: Array, _values :: Array }`
         + format(`\n\t arg: %j`, kv))
 
-    return this.copy(kv)
+    this._values = kv._values.map(el => isNull(el) ? undefined : el)
+    this._keys   = kv._keys.map(el => isNull(el) ? undefined : el)
+    return this
   }
 
   dump() {
