@@ -1,8 +1,7 @@
 'use strict'
 
 import { debugMethods } from 'simple-debugger'
-import { shuffle, isNumber, isNaN,
-  isNull, isUndefined, isArray } from 'lodash'
+import { shuffle, isNumber, isNaN, isNull, isArray } from 'lodash'
 import { format } from 'util'
 
 export default class Queue {
@@ -167,10 +166,6 @@ export default class Queue {
   next() {
     if (!this.size())
       throw new Error(`Queue#next problem: empty queue`
-        + format(`\n\t queue: %j`, this._queue)
-        + format(`\n\t storage: %j`, this._storage))
-    if (this._queue.some(e => isUndefined(e)))
-      throw new Error(`Queue#next problem: queue has hole`
         + format(`\n\t queue: %j`, this._queue)
         + format(`\n\t storage: %j`, this._storage))
 
