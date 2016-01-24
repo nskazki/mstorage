@@ -1,8 +1,8 @@
 'use strict'
 
 import { debugMethods } from 'simple-debugger'
-import { shuffle, isNumber, isNaN, isNull, isArray } from 'lodash'
-import { format } from 'util'
+import { shuffle, isNaN, isNull, isArray } from 'lodash'
+import { inspect } from 'util'
 
 export default class Queue {
   constructor() {
@@ -20,8 +20,8 @@ export default class Queue {
 
   copy(q) {
     if (!isArray(q._queue) || !isArray(q._storage))
-      throw new Error(`Queue#copy problem: arg must be a Queue`
-        + format(`\n\t arg: %j`, q))
+      throw new Error(`Queue#copy problem: arg must be a Queue\
+        \n\t arg: ${inspect(q)}`)
 
     this._storage = q._storage.concat()
     this._queue   = q._queue.concat()
@@ -30,8 +30,8 @@ export default class Queue {
 
   restore(q) {
     if (!isArray(q._queue) || !isArray(q._storage))
-      throw new Error(`Queue#restore problem: arg must be { _queue :: Array, _storage :: Array }`
-        + format(`\n\t arg: %j`, q))
+      throw new Error(`Queue#restore problem: arg must be { _queue :: Array, _storage :: Array }\
+        \n\t arg: ${inspect(q)}`)
 
     this._storage = q._storage.concat()
     this._queue   = q._queue.concat()
@@ -81,8 +81,9 @@ export default class Queue {
   id(item) {
     let id = this._getStorageId(item)
     if (id === -1)
-      throw new Error(`Queue#id problem: id by item not found`
-        + format('\n\t item: %j', item))
+      throw new Error(`Queue#id problem: id by item not found\
+        \n\t item: ${inspect(item)}`)
+
     return id
   }
 
@@ -98,8 +99,8 @@ export default class Queue {
   del(storageId) {
     storageId = parseInt(storageId)
     if (!this.has(storageId))
-      throw new Error(`Queue#del problem: item not found by storageId`
-        + format(`\n\t storageId: %j`, storageId))
+      throw new Error(`Queue#del problem: item not found by storageId\
+        \n\t storageId: ${inspect(storageId)}`)
 
     let queueId = this._getQueueId(storageId)
     if (queueId === -1)
@@ -115,8 +116,8 @@ export default class Queue {
 
   delByValue(item) {
     if (!this.hasByValue(item))
-      throw new Error(`Queue#delByValue problem: storageId not found by item`
-        + format(`\n\t item: %j`, item))
+      throw new Error(`Queue#delByValue problem: storageId not found by item\
+        \n\t item: ${inspect(item)}`)
 
     let storageId = this.id(item)
     return this.del(storageId)
@@ -142,8 +143,8 @@ export default class Queue {
   get(storageId) {
     storageId = parseInt(storageId)
     if (!this.has(storageId))
-      throw new Error(`Queue#get problem: item not found by storageId`
-        + format(`\n\t storageId: %j`, storageId))
+      throw new Error(`Queue#get problem: item not found by storageId\
+        \n\t storageId: ${inspect(storageId)}`)
     return this._storage[storageId]
   }
 
@@ -165,16 +166,16 @@ export default class Queue {
 
   next() {
     if (!this.size())
-      throw new Error(`Queue#next problem: empty queue`
-        + format(`\n\t queue: %j`, this._queue)
-        + format(`\n\t storage: %j`, this._storage))
+      throw new Error(`Queue#next problem: empty queue\
+        \n\t queue: ${inspect(this._queue)}\
+        \n\t storage: ${inspect(this._storage)}`)
 
     let storageId = this._queue.shift()
     if (!this.has(storageId))
-      throw new Error(`Queue#next problem: item not found by storageId`
-        + format(`\n\t storageId: %j`, storageId)
-        + format(`\n\t queue: %j`, this._queue)
-        + format(`\n\t storage: %j`, this._storage))
+      throw new Error(`Queue#next problem: item not found by storageId\
+        \n\t storageId: ${inspect(storageId)}\
+        \n\t queue: ${inspect(this._queue)}\
+        \n\t storage: ${inspect(this._storage)}`)
 
     let item = this.get(storageId)
     delete this._storage[storageId]
@@ -189,8 +190,8 @@ export default class Queue {
   toTail(storageId) {
     storageId = parseInt(storageId)
     if (!this.has(storageId))
-      throw new Error(`Queue#toTail problem: item not found by storageId`
-        + format(`\n\t storageId: %j`, storageId))
+      throw new Error(`Queue#toTail problem: item not found by storageId\
+        \n\t storageId: ${inspect(storageId)}`)
 
     let queueId = this._getQueueId(storageId)
     if (queueId === -1)
@@ -207,8 +208,8 @@ export default class Queue {
   toHead(storageId) {
     storageId = parseInt(storageId)
     if (!this.has(storageId))
-      throw new Error(`Queue#toHead problem: item not found by storageId`
-        + format(`\n\t storageId: %j`, storageId))
+      throw new Error(`Queue#toHead problem: item not found by storageId\
+        \n\t storageId: ${inspect(storageId)}`)
 
     let queueId = this._getQueueId(storageId)
     if (queueId === -1)

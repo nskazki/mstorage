@@ -2,7 +2,7 @@
 
 import { debugMethods } from 'simple-debugger'
 import { isObject, isArray, isNumber } from 'lodash'
-import { format } from 'util'
+import { inspect } from 'util'
 import xxhashjs from 'xxhashjs'
 
 let obj2json = JSON.stringify
@@ -34,8 +34,8 @@ export default class HashVault {
 
   copy(hv) {
     if (!isArray(hv._array) || !isNumber(hv._seed))
-      throw new Error(`HashVault#copy problem: arg must be a HashVault`
-        + format(`\n\t arg: %j`, hv))
+      throw new Error(`HashVault#copy problem: arg must be a HashVault\
+        \n\t arg: ${inspect(hv)}`)
 
     this._seed  = hv._seed
     this._array = hv._array.concat()
@@ -44,8 +44,8 @@ export default class HashVault {
 
   restore(hv) {
     if (!isArray(hv._array) || !isNumber(hv._seed))
-      throw new Error(`HashVault#restore problem: arg must be a { _array :: Array, _seed :: Number }`
-        + format(`\n\t arg: %j`, hv))
+      throw new Error(`HashVault#restore problem: arg must be a { _array :: Array, _seed :: Number }\
+        \n\t arg: ${inspect(hv)}`)
 
     return this.copy(hv)
   }
@@ -64,8 +64,8 @@ export default class HashVault {
   id(searchEl) {
     let searchIndex = this._indexOf(searchEl)
     if (searchIndex === -1)
-      throw new Error(`HashVault#id problem: searchIndex not found by searchEl`
-        + format(`\n\t searchEl: %j`, searchEl))
+      throw new Error(`HashVault#id problem: searchIndex not found by searchEl\
+        \n\t searchEl: ${inspect(searchEl)}`)
 
     return searchIndex
   }
@@ -87,8 +87,8 @@ export default class HashVault {
 
   del(oldIndex) {
     if (!this.has(oldIndex))
-      throw new Error(`HashVault#del problem: oldEl not found by oldIndex!`
-        + format(`\n\t oldIndex: %j`, oldIndex))
+      throw new Error(`HashVault#del problem: oldEl not found by oldIndex!\
+        \n\t oldIndex: ${inspect(oldIndex)}`)
 
     this._array.splice(oldIndex, 1)
     return this
@@ -97,8 +97,8 @@ export default class HashVault {
   delByValue(oldEl) {
     let oldIndex = this._indexOf(oldEl)
     if (oldIndex === -1)
-      throw new Error(`HashVault#delByValue problem: oldIndex not found by oldEl!`
-        + format(`\n\t oldEl: %j`, oldEl))
+      throw new Error(`HashVault#delByValue problem: oldIndex not found by oldEl!\
+        \n\t oldEl: ${inspect(oldEl)}`)
 
     this._array.splice(oldIndex, 1)
     return this

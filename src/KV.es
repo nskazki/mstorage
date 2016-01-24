@@ -2,7 +2,7 @@
 
 import { debugMethods } from 'simple-debugger'
 import { isArray, isNull, isNaN } from 'lodash'
-import { format } from 'util'
+import { inspect } from 'util'
 
 export default class KV {
   constructor() {
@@ -20,8 +20,8 @@ export default class KV {
 
   copy(kv) {
     if (!isArray(kv._keys) || !isArray(kv._values))
-      throw new Error(`KV#copy problem: arg must be a KV`
-        + format(`\n\t arg: %j`, kv))
+      throw new Error(`KV#copy problem: arg must be a KV\
+        \n\t arg: ${inspect(kv)}`)
 
     this._values = kv._values.concat()
     this._keys   = kv._keys.concat()
@@ -30,8 +30,8 @@ export default class KV {
 
   restore(kv) {
     if (!isArray(kv._keys) || !isArray(kv._values))
-      throw new Error(`KV#restore problem: arg must be a { _keys :: Array, _values :: Array }`
-        + format(`\n\t arg: %j`, kv))
+      throw new Error(`KV#restore problem: arg must be a { _keys :: Array, _values :: Array }\
+        \n\t arg: ${inspect(kv)}`)
 
     this._values = kv._values.map(el => isNull(el) ? undefined : el)
     this._keys   = kv._keys.map(el => isNull(el) ? undefined : el)
@@ -59,14 +59,14 @@ export default class KV {
 
   has(k) {
     if (isNaN(k))
-      throw new Error(format(`KV#has problem: search by NaN not allowed!`))
+      throw new Error(`KV#has problem: search by NaN not allowed!`)
 
     return this._keyIndex(k) !== -1
   }
 
   hasByValue(value) {
     if (isNaN(value))
-      throw new Error(format(`KV#hasByValue problem: search by NaN not allowed`))
+      throw new Error(`KV#hasByValue problem: search by NaN not allowed`)
 
     return this._valueIndex(value) !== -1
   }
@@ -93,7 +93,7 @@ export default class KV {
 
   get(k) {
     if (!this.has(k))
-      throw new Error(format(`KV#get problem: keys not has %j`, k))
+      throw new Error(`KV#get problem: keys not has ${inspect(k)}`)
 
     let index = this._keyIndex(k)
     return this._getValue(index)
@@ -101,7 +101,7 @@ export default class KV {
 
   getByValue(v) {
     if (!this.hasByValue(v))
-      throw new Error(format(`KV#getByValue problem: values not has %j`, v))
+      throw new Error(`KV#getByValue problem: values not has ${inspect(v)}`)
 
     let index = this._valueIndex(v)
     return this._getKey(index)
@@ -117,7 +117,7 @@ export default class KV {
 
   set(k, v) {
     if (isNaN(k))
-      throw new Error(format(`KV#set problem: using NaN as a key not allowed!`))
+      throw new Error(`KV#set problem: using NaN as a key not allowed!`)
 
     this._values.push(v)
     this._keys.push(k)
@@ -126,7 +126,7 @@ export default class KV {
 
   del(k) {
     if (!this.has(k))
-      throw new Error(format(`KV#del problem: keys not has %j`, k))
+      throw new Error(`KV#del problem: keys not has ${inspect(k)}`)
 
     let index = this._keyIndex(k)
     this._values.splice(index, 1)
@@ -136,7 +136,7 @@ export default class KV {
 
   delByValue(v) {
     if (!this.hasByValue(v))
-      throw new Error(format(`KV#delByValue problem: values not has %j`, v))
+      throw new Error(`KV#delByValue problem: values not has ${inspect(v)}`)
 
     let index = this._valueIndex(v)
     this._values.splice(index, 1)
