@@ -125,8 +125,7 @@ export default class Queue {
 
   has(storageId) {
     storageId = parseInt(storageId)
-    let el = this._storage[storageId]
-    return !isUndefined(el)
+    return this._storage.hasOwnProperty(storageId)
   }
 
   hasByValue(item) {
@@ -154,7 +153,11 @@ export default class Queue {
   }
 
   all() {
-    return this._storage.filter(v => !isUndefined(v))
+    let s = this._storage
+    let r = []
+    for (var index = 0; index !== s.length; index++)
+      if (s.hasOwnProperty(index)) r.push(s[index])
+    return r
   }
 
   shuffle() {
