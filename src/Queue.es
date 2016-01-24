@@ -102,10 +102,10 @@ export default class Queue {
         + format(`\n\t storageId: %j`, storageId))
 
     let queueId = this._getQueueId(storageId)
-    if (!isNumber(queueId))
-      throw new Error(`Queue#del problem: queueId not found by storageId`
-        + format(`\n\t storageId: %j`, storageId)
-        + format(`\n\t item: %j`, this._storage[storageId]))
+    if (queueId === -1)
+      throw new Error(`Queue#del problem: queueId not found by storageId\
+        \n\t storageId: ${inspect(storageId)}\
+        \n\t item: ${inspect(this._storage[storageId])}`)
 
     delete this._storage[storageId]
     this._queue.splice(queueId, 1)
@@ -193,10 +193,10 @@ export default class Queue {
         + format(`\n\t storageId: %j`, storageId))
 
     let queueId = this._getQueueId(storageId)
-    if (!isNumber(queueId))
-      throw new Error(`Queue#toTail problem: queueId not found by storageId`
-        + format(`\n\t storageId: %j`, storageId)
-        + format(`\n\t item: %j`, this._storage[storageId]))
+    if (queueId === -1)
+      throw new Error(`Queue#toTail problem: queueId not found by storageId\
+        \n\t storageId: ${inspect(storageId)}\
+        \n\t item: ${inspect(this._storage[storageId])}`)
 
     this._queue.splice(queueId, 1)
     this._queue.push(storageId)
@@ -211,10 +211,10 @@ export default class Queue {
         + format(`\n\t storageId: %j`, storageId))
 
     let queueId = this._getQueueId(storageId)
-    if (!isNumber(queueId))
-      throw new Error(`Queue#toHead problem: queueId not found by storageId`
-        + format(`\n\t storageId: %j`, storageId)
-        + format(`\n\t item: %j`, this._storage[storageId]))
+    if (queueId === -1)
+      throw new Error(`Queue#toHead problem: queueId not found by storageId\
+        \n\t storageId: ${inspect(storageId)}\
+        \n\t item: ${inspect(this._storage[storageId])}`)
 
     this._queue.splice(queueId, 1)
     this._queue.unshift(storageId)
