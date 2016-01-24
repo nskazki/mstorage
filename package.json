@@ -18,7 +18,8 @@
     "build": "babel src --retain-lines --out-dir src-build",
     "eslint": "eslint $(find . -not -path '*/*-build/*' -not -path '*/node_modules/*' -type f -name '*.es')",
     "mocha": "mocha test",
-    "test": "npm run eslint && npm run mocha"
+    "test": "npm run eslint && npm run mocha",
+    "npmignore": "npm pack . > /dev/null && tar -tvf *.tgz && rm *.tgz"
   },
   "repository": {
     "type": "git",
