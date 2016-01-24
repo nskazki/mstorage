@@ -1,7 +1,7 @@
 'use strict'
 
 import { debugMethods } from 'simple-debugger'
-import { isArray, isNull } from 'lodash'
+import { isArray, isNull, isNaN } from 'lodash'
 import { format } from 'util'
 
 export default class KV {
@@ -58,10 +58,16 @@ export default class KV {
   }
 
   has(k) {
+    if (isNaN(k))
+      throw new Error(format(`KV#has problem: search by NaN not allowed!`))
+
     return this._keyIndex(k) !== -1
   }
 
   hasByValue(value) {
+    if (isNaN(value))
+      throw new Error(format(`KV#hasByValue problem: search by NaN not allowed`))
+
     return this._valueIndex(value) !== -1
   }
 
@@ -110,6 +116,9 @@ export default class KV {
   }
 
   set(k, v) {
+    if (isNaN(k))
+      throw new Error(format(`KV#set problem: using NaN as a key not allowed!`))
+
     this._values.push(v)
     this._keys.push(k)
     return this
