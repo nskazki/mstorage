@@ -1,7 +1,8 @@
 'use strict'
 
 import { debugMethods } from 'simple-debugger'
-import { shuffle, isNumber, isNull, isUndefined, isArray } from 'lodash'
+import { shuffle, isNumber, isNaN,
+  isNull, isUndefined, isArray } from 'lodash'
 import { format } from 'util'
 
 export default class Queue {
@@ -129,6 +130,9 @@ export default class Queue {
   }
 
   hasByValue(item) {
+    if (isNaN(item))
+      throw new Error(`Queue#hasByValue problem: search by NaN not allowed!`)
+
     let id = this._getStorageId(item)
     return id !== -1
   }
