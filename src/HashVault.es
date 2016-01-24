@@ -19,6 +19,7 @@ export default class HashVault {
   init(initArray) {
     this._array = initArray.map(el => {
       if (isObject(el)) el = obj2json(el)
+      else el = '' + el
       return xxhashjs(el, this._seed).toNumber()
     })
 
@@ -75,6 +76,7 @@ export default class HashVault {
 
   add(newEl) {
     if (isObject(newEl)) newEl = obj2json(newEl)
+    else newEl = '' + newEl
     let newHash = xxhashjs(newEl, this._seed).toNumber()
 
     let newIndex = this._insertIndex(newHash)
@@ -112,6 +114,7 @@ export default class HashVault {
 
   exists(searchEl) {
     if (isObject(searchEl)) searchEl = obj2json(searchEl)
+    else searchEl = '' + searchEl
     let searchHash = xxhashjs(searchEl, this._seed).toNumber()
 
     let minIndex = 0
@@ -137,6 +140,7 @@ export default class HashVault {
 
   _indexOf(searchEl) {
     if (isObject(searchEl)) searchEl = obj2json(searchEl)
+    else searchEl = '' + searchEl
     var searchHash = xxhashjs(searchEl, this._seed).toNumber()
 
     var minIndex = 0
