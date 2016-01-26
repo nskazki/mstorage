@@ -62,25 +62,33 @@ describe('Queue', () => {
 
   it('each (forEach)', () => {
     let q = new Queue()
-    let values = [ { 1: 1 }, { 2: 2 } ]
-    values.forEach(val => q.add(val))
+    let values = [ { 1: 1 }, { 2: 2 }, { 3: 3 } ]
+    let ids = values.map(val => q.add(val))
+
+    let toDelete = values.shift()
+    q.delByValue(toDelete)
 
     let context = { }
-    q.each(function (val, id) {
-      assert.ok(val, values[id])
-      assert.ok(context, this)
+    q.each(function(val, id) {
+      assert.ok(values.indexOf(val) !== -1)
+      assert.ok(ids.indexOf(id) !== -1)
+      assert.ok(context === this)
     }, context)
   })
 
   it('map', () => {
     let q = new Queue()
-    let values = [ { 1: 1 }, { 2: 2 } ]
-    values.forEach(val => q.add(val))
+    let values = [ { 1: 1 }, { 2: 2 }, { 3: 3 } ]
+    let ids = values.map(val => q.add(val))
+
+    let toDelete = values.shift()
+    q.delByValue(toDelete)
 
     let context = { }
-    q.map(function (val, id) {
-      assert.ok(val, values[id])
-      assert.ok(context, this)
+    q.map(function(val, id) {
+      assert.ok(values.indexOf(val) !== -1)
+      assert.ok(ids.indexOf(id) !== -1)
+      assert.ok(context === this)
       return [ val ]
     }, context)
 
@@ -299,9 +307,7 @@ describe('Queue', () => {
     q.toTail(id1)
     assert.ok(q.get(id1) === val1, 'values must be equal')
     assert.ok(q.getByValue(val1) === id1, 'ids must be equal')
-
-    assert.ok(q.next(), val2,
-      'values must be equal')
+    assert.ok(q.next() === val2, 'values must be equal')
   })
 
   it('toTail - rejected', () => {
@@ -323,9 +329,9 @@ describe('Queue', () => {
     let id2 = q.add(val2)
 
     q.toHead(id2)
-    assert.ok(q.get(id2), val2)
+    assert.ok(q.get(id2) === val2)
     assert.ok(q.getByValue(val2))
-    assert.ok(q.next(), val2)
+    assert.ok(q.next() === val2)
   })
 
   it('toHead - rejected', () => {

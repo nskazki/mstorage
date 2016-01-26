@@ -59,8 +59,7 @@ export default class Queue {
   }
 
   each(func, context) {
-    this._queue.forEach(queueId => {
-      let storageId = this._getStorageIdByQueueId(queueId)
+    this._queue.forEach(storageId => {
       let item = this._getItemByStorageId(storageId)
       func.call(context, item, storageId)
     })
@@ -68,8 +67,7 @@ export default class Queue {
   }
 
   map(func, context) {
-    this._queue.forEach(queueId => {
-      let storageId = this._getStorageIdByQueueId(queueId)
+    this._queue.forEach(storageId => {
       let item = this._getItemByStorageId(storageId)
       let newItem = func.call(context, item, storageId)
       this._setItemByStorageId(storageId, newItem)
