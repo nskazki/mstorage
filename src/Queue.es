@@ -59,10 +59,31 @@ export default class Queue {
   }
 
   each(func, context) {
-    this._queue.forEach(id => {
-      let v = this.get(id)
-      func.call(context, v, id)
+    this._queue.forEach(queueId => {
+      let storageId = this._getStorageIdByQueueId(queueId)
+      let item = this._getItemByStorageId(storageId)
+      func.call(context, item, storageId)
     })
+    return this
+  }
+
+  map(func, context) {
+    this._queue.forEach(queueId => {
+      let storageId = this._getStorageIdByQueueId(queueId)
+      let item = this._getItemByStorageId(storageId)
+      let newItem = func.call(context, item, storageId)
+      this._setItemByStorageId(storageId, newItem)
+    })
+    return this
+  }
+
+  replace(storageId, newItem) {
+    storageId = parseInt(storageId)
+    if (!this.has(storageId))
+      throw new Error(`Queue#del problem: item not found by storageId\
+        \n\t storageId: ${inspect(storageId)}`)
+
+    this._setItemByStorageId(storageId, newItem)
     return this
   }
 
@@ -70,16 +91,29 @@ export default class Queue {
     return this._storage.length
   }
 
-  _getStorageId(item) {
+  _getStorageIdByQueueId(queueId) {
+    return this._queue[queueId]
+  }
+
+  _getStorageIdByItem(item) {
     return this._storage.indexOf(item)
   }
 
-  _getQueueId(storageId) {
+  _getQueueIdByStorageId(storageId) {
     return this._queue.indexOf(storageId)
   }
 
+  _getItemByStorageId(storageId) {
+    return this._storage[storageId]
+  }
+
+  _setItemByStorageId(storageId, item) {
+    this._storage[storageId] = item
+    return this
+  }
+
   id(item) {
-    let id = this._getStorageId(item)
+    let id = this._getStorageIdByItem(item)
     if (id === -1)
       throw new Error(`Queue#id problem: id by item not found\
         \n\t item: ${inspect(item)}`)
@@ -102,7 +136,7 @@ export default class Queue {
       throw new Error(`Queue#del problem: item not found by storageId\
         \n\t storageId: ${inspect(storageId)}`)
 
-    let queueId = this._getQueueId(storageId)
+    let queueId = this._getQueueIdByStorageId(storageId)
     if (queueId === -1)
       throw new Error(`Queue#del problem: queueId not found by storageId\
         \n\t storageId: ${inspect(storageId)}\
@@ -132,7 +166,7 @@ export default class Queue {
     if (isNaN(item))
       throw new Error(`Queue#hasByValue problem: search by NaN not allowed!`)
 
-    let id = this._getStorageId(item)
+    let id = this._getStorageIdByItem(item)
     return id !== -1
   }
 
@@ -193,7 +227,7 @@ export default class Queue {
       throw new Error(`Queue#toTail problem: item not found by storageId\
         \n\t storageId: ${inspect(storageId)}`)
 
-    let queueId = this._getQueueId(storageId)
+    let queueId = this._getQueueIdByStorageId(storageId)
     if (queueId === -1)
       throw new Error(`Queue#toTail problem: queueId not found by storageId\
         \n\t storageId: ${inspect(storageId)}\
@@ -211,7 +245,7 @@ export default class Queue {
       throw new Error(`Queue#toHead problem: item not found by storageId\
         \n\t storageId: ${inspect(storageId)}`)
 
-    let queueId = this._getQueueId(storageId)
+    let queueId = this._getQueueIdByStorageId(storageId)
     if (queueId === -1)
       throw new Error(`Queue#toHead problem: queueId not found by storageId\
         \n\t storageId: ${inspect(storageId)}\
