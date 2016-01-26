@@ -225,6 +225,29 @@ export default class Queue {
     return this.next()
   }
 
+  last() {
+    if (!this.size())
+      throw new Error(`Queue#last problem: empty queue\
+        \n\t queue: ${inspect(this._queue)}\
+        \n\t storage: ${inspect(this._storage)}`)
+
+    let storageId = this._queue.pop()
+    if (!this.has(storageId))
+      throw new Error(`Queue#last problem: item not found by storageId\
+        \n\t storageId: ${inspect(storageId)}\
+        \n\t queue: ${inspect(this._queue)}\
+        \n\t storage: ${inspect(this._storage)}`)
+
+    let item = this._getItemByStorageId(storageId)
+    delete this._storage[storageId]
+
+    return item
+  }
+
+  pop() {
+    return this.last()
+  }
+
   toTail(storageId) {
     storageId = parseInt(storageId)
     if (!this.has(storageId))
