@@ -77,16 +77,6 @@ export default class Queue {
     return this
   }
 
-  replace(storageId, newItem) {
-    storageId = parseInt(storageId)
-    if (!this.has(storageId))
-      throw new Error(`Queue#del problem: item not found by storageId\
-        \n\t storageId: ${inspect(storageId)}`)
-
-    this._setItemByStorageId(storageId, newItem)
-    return this
-  }
-
   _newStorageId() {
     return this._storage.length
   }
@@ -112,15 +102,6 @@ export default class Queue {
     return this
   }
 
-  id(item) {
-    let id = this._getStorageIdByItem(item)
-    if (id === -1)
-      throw new Error(`Queue#id problem: id by item not found\
-        \n\t item: ${inspect(item)}`)
-
-    return id
-  }
-
   add(item) {
     let storageId = this._newStorageId()
 
@@ -128,6 +109,16 @@ export default class Queue {
     this._storage.push(item)
 
     return storageId
+  }
+
+  replace(storageId, newItem) {
+    storageId = parseInt(storageId)
+    if (!this.has(storageId))
+      throw new Error(`Queue#replace problem: item not found by storageId\
+        \n\t storageId: ${inspect(storageId)}`)
+
+    this._setItemByStorageId(storageId, newItem)
+    return this
   }
 
   del(storageId) {
@@ -179,18 +170,31 @@ export default class Queue {
     if (!this.has(storageId))
       throw new Error(`Queue#get problem: item not found by storageId\
         \n\t storageId: ${inspect(storageId)}`)
-    return this._storage[storageId]
+    return this._getItemByStorageId(storageId)
   }
 
   getByValue(item) {
-    return this.id(item)
+    let id = this._getStorageIdByItem(item)
+    if (id === -1)
+      throw new Error(`Queue#getByValue problem: id by item not found\
+        \n\t item: ${inspect(item)}`)
+
+    return id
+  }
+
+  id(item) {
+    return this.getByValue(item)
   }
 
   all() {
-    let s = this._storage
+    let q = this._queue
     let r = []
-    for (var index = 0; index !== s.length; index++)
-      if (s.hasOwnProperty(index)) r.push(s[index])
+    for (var index = 0; index !== q.length; index++) {
+      let storageId = this._getStorageIdByQueueId(index)
+      let item = this._getItemByStorageId(storageId)
+      r.push(item)
+    }
+
     return r
   }
 
@@ -211,7 +215,7 @@ export default class Queue {
         \n\t queue: ${inspect(this._queue)}\
         \n\t storage: ${inspect(this._storage)}`)
 
-    let item = this.get(storageId)
+    let item = this._getItemByStorageId(storageId)
     delete this._storage[storageId]
 
     return item
