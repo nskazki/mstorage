@@ -72,6 +72,36 @@ describe('Queue', () => {
     }, context)
   })
 
+  it('map', () => {
+    let q = new Queue()
+    let values = [ { 1: 1 }, { 2: 2 } ]
+    values.forEach(val => q.add(val))
+
+    let context = { }
+    q.map(function (val, id) {
+      assert.ok(val, values[id])
+      assert.ok(context, this)
+      return [ val ]
+    }, context)
+
+    assert.deepStrictEqual(
+      q.all(),
+      values.map(val => [ val ]))
+  })
+
+  it('replace', () => {
+    let q = new Queue()
+    let values = [ { 1: 1 }, { 2: 2 } ]
+    values.forEach(val => q.add(val))
+
+    let id = q.add({ 3: 3 })
+    q.toHead(id)
+    let newValue = { 3: 4 }
+    q.replace(id, newValue)
+
+    assert(q.get(id) === newValue)
+  })
+
   it('add', () => {
     let q = new Queue()
     let val = { 1: 1 }
@@ -231,6 +261,28 @@ describe('Queue', () => {
     assert.ok(next2 === val2)
     assert.ok(q.has(id2) === false)
     assert.ok(q.hasByValue(val2) === false)
+
+    assert.throws(() => q.next(),
+      'the queue must be empty')
+  })
+
+  it('last (pop)', () => {
+    let q = new Queue()
+    let val1 = { 1: 1 }
+    let val2 = { 2: 2 }
+
+    let id1 = q.add(val1)
+    let id2 = q.add(val2)
+
+    let last2 = q.last()
+    assert.ok(last2 === val2)
+    assert.ok(q.has(id2) === false)
+    assert.ok(q.hasByValue(val2) === false)
+
+    let last1 = q.last()
+    assert.ok(last1 === val1)
+    assert.ok(q.has(id1) === false)
+    assert.ok(q.hasByValue(val1) === false)
 
     assert.throws(() => q.next(),
       'the queue must be empty')
