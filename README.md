@@ -4,6 +4,8 @@
 npm i -S mstorage
 ```
 
+Special serializer and deserializer for `mstorage`: [mstorage-restore](https://github.com/nskazki/mstorage-restore)
+
 ```js
 import { KV } from 'mstorage'
 import assert from 'assert'
