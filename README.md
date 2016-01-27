@@ -69,7 +69,9 @@ assert(hv.exists({ 1: 10000000 }))
 * [`copy`](#copy--1)
 * [`dump` & `restore`](#dump--restore--1)
 * [`each` alias for `forEach`](#each-alias-for-foreach-)
+* [`map`](#map-)
 * [`add`](#add-)
+* [`replace`](#replace-)
 * [`del`](#del--1)
 * [`delByValue`](#delbyvalue--1)
 * [`has`](#has--1)
@@ -79,6 +81,7 @@ assert(hv.exists({ 1: 10000000 }))
 * [`all`](#all-)
 * [`shuffle`](#shuffle-)
 * [`next` alias for `shift`](#next-alias-for-shift-)
+* [`last` alias for `pop`](#last-alias-for-pop-)
 * [`toTail`](#totail-)
 * [`toHead`](#tohead-)
 * [`size`](#size--1)
@@ -249,13 +252,30 @@ q.add(2)
 q.each(console.log)
 ```
 
+#### `map` [[🛨]](#queue)
+``` js
+var q = new Queue()
+q.add(1)
+q.add(2)
+q.map(el => el+1)
+assert.deepEqual(q.all(), [ 2, 3 ])
+```
+
 #### `add` [[🛨]](#queue)
 ```js
 var q = new Queue()
 q.add(1)
 assert.equal(q.size(), 1)
 ```
- 
+
+#### `replace` [[🛨]](#queue)
+```js
+var q = new Queue()
+var id1 = q.add(1)
+q.replace(id1, 2)
+assert.equal(q.get(id1), 2)
+```
+
 #### `del` [[🛨]](#queue)
 ``` js
 var q = new Queue()
@@ -320,8 +340,19 @@ console.log(q.shuffle())
 ```js
 var q = new Queue()
 q.add(1)
-var next = q.next()
-assert.equal(next, 1)
+q.add(2)
+assert.equal(q.next(), 1)
+assert.equal(q.next(), 2)
+assert.equal(q.size(), 0)
+```
+
+#### `last` alias for `pop` [[🛨]](#queue)
+```js
+var q = new Queue()
+q.add(1)
+q.add(2)
+assert.equal(q.last(), 2)
+assert.equal(q.last(), 1)
 assert.equal(q.size(), 0)
 ```
 
