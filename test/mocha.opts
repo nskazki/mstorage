@@ -1,1 +1,1 @@
---compilers es:babel-register
+--compilers es6:babel-register
