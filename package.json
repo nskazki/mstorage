@@ -42,7 +42,7 @@
     "power-assert": "^1.2.0"
   },
   "dependencies": {
-    "lodash": "^3.10.1",
+    "lodash": "^4.17.20",
     "simple-debugger": "^1.0.3",
     "xxhashjs": "^0.1.1"
   },
